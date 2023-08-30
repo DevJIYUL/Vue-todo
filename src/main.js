@@ -1,7 +1,8 @@
 import Vue from "vue";
-import App from "./App.vue";
+// import App from "./App.vue";
 import Meta from "vue-meta";
 import axios from "axios";
+import Home from "./Home.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -16,5 +17,5 @@ Vue.use(Meta, {
   attribute: "data-vue-meta",
 });
 new Vue({
-  render: (h) => h(App),
+  render: (h) => h(Home),
 }).$mount("#app");

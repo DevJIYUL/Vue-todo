@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- <LogIn></LogIn> -->
     <TodoHeader></TodoHeader>
     <TodoInput v-on:addTodo="addTodo"></TodoInput>
     <TodoList v-bind:propsdata="todoItems" @removeTodo="removeTodo"></TodoList>
@@ -8,11 +9,10 @@
 </template>
 
 <script>
-import TodoFooter from './components/TodoFooter.vue'
-import TodoHeader from './components/TodoHeader.vue'
-import TodoInput from './components/TodoInput.vue'
-import TodoList from './components/TodoList.vue'
-
+import TodoFooter from './components/todo/TodoFooter.vue'
+import TodoHeader from './components/todo/TodoHeader.vue'
+import TodoInput from './components/todo/TodoInput.vue'
+import TodoList from './components/todo/TodoList.vue'
 export default {
   data() {
     return {
@@ -21,7 +21,6 @@ export default {
   },
   methods: {
     addTodo(todoItem){
-      localStorage.setItem(todoItem,todoItem);
       this.todoItems.push(todoItem);
       this.$http.post(`http://localhost:8000/todo`,{
         user :{
@@ -34,11 +33,11 @@ export default {
       })
     },
     removeTodo(todoItem,index){
-      localStorage.removeItem(todoItem);
+      // localStorage.removeItem(todoItem);
       this.todoItems.splice(index,1);
     },
     clearAll(){
-      localStorage.clear();
+      // localStorage.clear();
       this.todoItems = []
     }
   },
@@ -62,6 +61,7 @@ export default {
     ]
   },
   components : {
+    // 'LogIn' : LogIn,
     'TodoHeader' : TodoHeader,
     'TodoInput' : TodoInput,
     'TodoList' : TodoList,
