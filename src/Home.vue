@@ -14,14 +14,21 @@ import Login from './components/home/Login.vue'
 export default {
     data() {
         return {
-        todoItems:[]
+
         }
     },
     methods: {
         login(id,password){
             console.log("홈에 도착");
             console.log(id+" "+password);
-            
+            this.$http.post(`http://localhost:8000/login`,{
+                userId : id,
+                password : password
+            })
+            .then(res =>{
+                console.log(res);
+                this.$router.push('todo');
+            })
         }
     },
     created() {
