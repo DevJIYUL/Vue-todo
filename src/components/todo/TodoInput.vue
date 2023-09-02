@@ -3,7 +3,7 @@
         <input type="text" v-model="newTodoItem" placeholder="오늘 취뽀를 위해 해야할일" v-on:keyup.enter="addTodo" >
         <span class="addContainer" v-on:click="addTodo">
             <!-- <button v-on:click="addTodo" class="addBtn">추가</button> -->
-            <i class="addBtn fas fa-plus" aria-hidden="true"></i>
+            <i class="addBtn fa fa-plus" aria-hidden="true"></i>
         </span>
         <modal v-if="showModal" @close="showModal = false">
             <h3 slot="header">Warn</h3>

@@ -1,9 +1,9 @@
 <template>
     <section>
         <transition-group name="list" tag="ul">
-            <li v-for="todoItem,index in propsdata" class="shadow" v-bind:key="todoItem">
+            <li v-for="todoItem,index in propsdata" class="shadow" :key="todoItem.todoId">
                 <i class="checkBtn fas fa-check" aria-hidden="true"></i>
-                {{todoItem}}
+                {{todoItem.text}}
                 <span class="removeBtn" type = "button" @click="removeTodo(todoItem,index)">
                     <!-- <button></button> -->
                     <i class="far fa-trash-alt" aria-hidden="true"></i>
@@ -56,7 +56,7 @@ export default {
         line-height: 45px;
         color: #62acde;
         margin-right: 5px;
-        margin-top: 15px;
+        margin-top: 5px;
     }
     .removeBtn{
         margin-left: auto;

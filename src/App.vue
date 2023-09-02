@@ -1,88 +1,101 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div id="app">
-    <!-- <LogIn></LogIn> -->
-    <TodoHeader></TodoHeader>
-    <TodoInput v-on:addTodo="addTodo"></TodoInput>
-    <TodoList v-bind:propsdata="todoItems" @removeTodo="removeTodo"></TodoList>
-    <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
-  </div>
+    <div id="app">
+        <!-- <router-link :to="{name : `TodoView`}">투두 서비슬 이동</router-link> -->
+        <Login v-show="!logined" v-on:logIn="login"></Login>
+        <modal v-if="showModal" @close="showModal = false">
+            <h3 slot="header">Warn</h3>
+            <span slot="footer" @click="showModal = false">
+                정보가 틀립니다.
+                <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
+            </span>
+        </modal>
+        <router-view v-show="logined"></router-view>
+    </div>
 </template>
 
 <script>
-import TodoFooter from './components/todo/TodoFooter.vue'
-import TodoHeader from './components/todo/TodoHeader.vue'
-import TodoInput from './components/todo/TodoInput.vue'
-import TodoList from './components/todo/TodoList.vue'
+import Login from './components/home/Login.vue';
+import Modal from './components/common/Modal.vue'
+
+
 export default {
-  data() {
-    return {
-      todoItems:[]
-    }
-  },
-  methods: {
-    addTodo(todoItem){
-      this.todoItems.push(todoItem);
-      this.$http.post(`http://localhost:8000/todo`,{
-        user :{
-          userId : 1
-        },
-        text : todoItem
-      })
-      .then(res =>{
-        console.log(res);
-      })
-    },
-    removeTodo(todoItem,index){
-      // localStorage.removeItem(todoItem);
-      this.todoItems.splice(index,1);
-    },
-    clearAll(){
-      // localStorage.clear();
-      this.todoItems = []
-    }
-  },
-  created() {
-    this.$http.get(`http://localhost:8000/todo/1`)
-    .then((result)=>{
-      console.log(result.data);
-      if(result.data.length>0){
-        for (var i = 0; i < result.data.length; i++) {
-          this.todoItems.push(result.data[i].text);
-          
+    name :"app",
+    data() {
+        return {
+            showModal : false,
+            logined : false,
+            user : {
+                userId : '',
+                email : '',
+                stric : ''
+            }
         }
-      }
-    })
-  },
-  metaInfo :{
-    title : 'TodoList',
-    meta :[
-      {charset : 'utf-8'},
-      {name : 'viewport',content :'width=device-width, initial-scale=1.0'}
-    ]
-  },
-  components : {
-    // 'LogIn' : LogIn,
-    'TodoHeader' : TodoHeader,
-    'TodoInput' : TodoInput,
-    'TodoList' : TodoList,
-    'TodoFooter' : TodoFooter,
-  }
+    },
+    methods: {
+        login(id,password){
+            console.log("홈에 도착");
+            console.log(id+" "+password);
+            this.$http.post(`http://localhost:8000/login`,{
+                userId : id,
+                password : password
+            })
+            .then(res =>{
+                console.log(res.status);
+                if(res.status == 200){
+                    this.user.userId = res.data.userId;
+                    this.user.email = res.data.email;
+                    this.user.stric = res.data.stric;
+                    this.changePage()
+                }else{
+                    this.showModal = !this.showModal;
+                }
+            })
+        },
+        changePage(){
+            console.log(this.user);
+            this.logined = !this.logined;
+            this.$router.push({
+                // path:"/todo",
+                name : "TodoView",
+                params : {
+                    userId : this.user.userId,
+                    email : this.user.email,
+                    stric : this.user.stric
+                }
+            });
+            // .catch(err=>{console.log(err)});
+        }
+    },
+    created() {
+        this.logined = false;
+    },
+    metaInfo :{
+        title : 'TodoList',
+        meta :[
+        {charset : 'utf-8'},
+        {name : 'viewport',content :'width=device-width, initial-scale=1.0'}
+        ]
+    },
+    components : {
+        Modal : Modal,
+        Login : Login,
+    }
 }
 </script>
 
 <style>
-  body{
-    text-align: center;
-    background-color: #e1e4f9;
-  }
-  input{
-    border-style: groove;
-    width: 200px;
-  }
-  button{
-    border-style: groove;
-  }
-  .shadow{
-    box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.03);
-  }
+    body{
+        text-align: center;
+        background-color: #e1e4f9;
+    }
+    #app {
+        margin: auto;
+        width: 700px;
+        background-color: #e1e4f9;
+        border-style: none;
+        font-size: 0.9rem;
+        line-height: 50px;
+        border-radius: 5px;
+    }
 </style>

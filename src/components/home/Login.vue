@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <div class="inputBox">
+        <h1>로그인</h1>
         <span>
             <input class="idInput" type="text" v-model="id" placeholder="아이디를 입력하세요">
         </span>
@@ -61,7 +62,7 @@ export default {
     }
     .inputBox{
         background-color: white;
-        height: 200px; 
+        height: 300px; 
         line-height: 50px;
         border-radius: 5px;
     }
