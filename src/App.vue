@@ -34,14 +34,11 @@ export default {
     },
     methods: {
         login(id,password){
-            console.log("홈에 도착");
-            console.log(id+" "+password);
             this.$http.post(`http://localhost:8000/login`,{
                 userId : id,
                 password : password
             })
             .then(res =>{
-                console.log(res.status);
                 if(res.status == 200){
                     this.user.userId = res.data.userId;
                     this.user.email = res.data.email;
@@ -53,7 +50,6 @@ export default {
             })
         },
         changePage(){
-            console.log(this.user);
             this.logined = !this.logined;
             this.$router.push({
                 // path:"/todo",
@@ -69,6 +65,8 @@ export default {
     },
     created() {
         this.logined = false;
+
+        this.$router.push({path:"/"});
     },
     metaInfo :{
         title : 'TodoList',
@@ -90,6 +88,7 @@ export default {
         background-color: #e1e4f9;
     }
     #app {
+      
         margin: auto;
         width: 700px;
         background-color: #e1e4f9;

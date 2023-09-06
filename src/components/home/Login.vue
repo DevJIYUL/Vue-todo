@@ -3,10 +3,10 @@
     <div class="inputBox">
         <h1>로그인</h1>
         <span>
-            <input class="idInput" type="text" v-model="id" placeholder="아이디를 입력하세요">
+            <v-text-field class="idInput" label="아이디" type="text" v-model="id" placeholder="아이디를 입력하세요"></v-text-field>
         </span>
         <span>
-            <input class="passwordInput" type="text" v-model="password" placeholder="패스워드를 입력하세요">
+            <v-text-field class="passwordInput" type="text" v-model="password" placeholder="패스워드를 입력하세요"></v-text-field>
         </span>
         <span class="loginContainer" v-on:click="logIn">
             <span>
@@ -56,10 +56,10 @@ export default {
         height: 50px;
         border-radius: 5px 5px 5px 5px;
     }
-    input:focus{
+    /* input:focus{
         outline: none;
         text-align: left;
-    }
+    } */
     .inputBox{
         background-color: white;
         height: 300px; 
@@ -68,6 +68,8 @@ export default {
     }
     .idInput{
         /* border-style: solid; */
+        margin-left: auto;
+        margin-right: auto;
         width: 500px;
         font-size: 0.9rem;
         border-radius: 5px;
@@ -77,7 +79,8 @@ export default {
         border-color: gray;
     }
     .passwordInput{
-        /* border-style: solid; */
+        margin-left: auto;
+        margin-right: auto;
         width: 500px;
         font-size: 0.9rem;
         border-radius: 5px;

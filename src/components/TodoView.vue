@@ -2,8 +2,10 @@
 <template>
     <div>
         <TodoHeader></TodoHeader>
+        <CalenderView v-on:datePick="datePick"></CalenderView>
         <TodoInput v-on:addTodo="addTodo"></TodoInput>
         <TodoList v-bind:propsdata="todoItems" @removeTodo="removeTodo"></TodoList>
+        <br>
         <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
     </div>
 </template>
@@ -13,6 +15,7 @@ import TodoFooter from './todo/TodoFooter.vue'
 import TodoHeader from './todo/TodoHeader.vue'
 import TodoInput from './todo/TodoInput.vue'
 import TodoList from './todo/TodoList.vue'
+import CalenderView from './todo/CalenderView.vue'
 
 export default {
     name : "Sweet-home",
@@ -32,6 +35,8 @@ export default {
     },
     data() {
         return {
+        date : '',
+        toDay : '',
         user : {
             userId : '',
             email : '',
@@ -41,8 +46,11 @@ export default {
         }
     },
     methods: {
+        datePick(date){
+            this.clearAll();
+            this.showList(this.user.userId,date);
+        },
         setAuth(){
-            console.log("setauth");
             this.user.userId = this.$route.params.userId;
             this.user.email = this.$route.params.email;
             this.user.stric = this.$route.params.stric;
@@ -53,40 +61,49 @@ export default {
                     userId : this.user.userId
             },
             text : todoItem
-        })
-        .then(res =>{
-            console.log(res);
-            this.todoItems.push(res.data);
-        })
+            })
+            .then(res =>{
+                console.log(res);
+                // this.todoItems.push(res.data);
+                this.clearAll();
+                this.showList(this.user.userId,this.toDay)    
+            })
+            
         },
         removeTodo(todoItem,index){
             this.todoItems.splice(index,1);
-            console.log(todoItem);
             this.$http.delete(`http://localhost:8000/todo/${todoItem.todoId}`)
-            .then(res=>{
-                console.log(res);
-            }).catch(err=>{
-                console.log(err);
+            .then(()=>{
+            }).catch(()=>{
             })
         },
         clearAll(){
             this.todoItems = []
+        },
+        showList(userId,pickDay){
+            this.$http.get(`http://localhost:8000/todo/${userId}/${pickDay}`)
+            .then((result)=>{
+            if(result.data.length>0){
+                for (var i = 0; i < result.data.length; i++) {
+                this.todoItems.push(result.data[i]);
+                
+                }
+        }
+        })
         }
     },
     created() {
         // console.log("hi"+this.props.userId);
         this.setAuth();
-        console.log(this.$route.params);
-        this.$http.get(`http://localhost:8000/todo/${this.user.userId}`)
-        .then((result)=>{
-        console.log(result.data);
-        if(result.data.length>0){
-            for (var i = 0; i < result.data.length; i++) {
-            this.todoItems.push(result.data[i]);
-            
-            }
-        }
-        })
+        var today = new Date();
+
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+
+        this.toDay = year + '-' + month  + '-' + day;
+        this.showList(this.user.userId,this.toDay);
+        
     },
     metaInfo :{
         title : 'TodoList',
@@ -100,6 +117,7 @@ export default {
         'TodoInput' : TodoInput,
         'TodoList' : TodoList,
         'TodoFooter' : TodoFooter,
+        'CalenderView' : CalenderView,
     }
 }
 </script>

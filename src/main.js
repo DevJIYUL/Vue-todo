@@ -8,6 +8,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faUserSecret } from "@fortawesome/free-solid-svg-icons";
+import vuetify from './plugins/vuetify'
 library.add(faUserSecret);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.prototype.$http = axios;
@@ -22,5 +23,6 @@ Vue.use(
 
 new Vue({
   router,
-  render: (h) => h(App),
+  vuetify,
+  render: (h) => h(App)
 }).$mount("#app");
